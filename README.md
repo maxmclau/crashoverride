@@ -1,4 +1,4 @@
-# Crash
+# Crashoverride
 
 Dorky bash function that litters your console with artifacts #hacktheplanet
 
