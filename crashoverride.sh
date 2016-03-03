@@ -14,7 +14,12 @@
 # The above copyright notice and this permission notice shall be included in all
 # copies or substantial portions of the Software.
 
-_crashoverrideMessages=( "リサフ" "ランク420" "現代のコ" "のコンピュー" )
+declare -a _crashoverrideMessages=( "リサフ" \
+                                    "ランク420" \
+                                    "現代のコ" \
+                                    "のコンピュー" \
+                                    "ニガー?" \
+                                    "²Ỏ͖͈̞̩͎̻̫̫̜͉̠̫͕̭̭̫̫̹̗̹͈̼̠̖͍͚̥͈̮̼͕̠̤̯̻̥̬̗̼̳̤̳̬̪̹͚̞̼̠͕̼̠̦͚̫͔̯̹͉͉̘͎͕̼̣̝͙̱̟̹̩̟̳̦̭͉̮̖̭̣̣̞̙̗̜̺̭̻̥͚͙̝̦̲̱͉͖͉̰̦͎̫̣̼͎͍̠̮͓̹̹͉̤̰̗̙͕͇͔̱͕̭͈̳̗̭͔̘̖̺̮̜̠͖̘͓̳͕̟̠̱̫̤͓͔̘̰̲͙͍͇̙͎̣̼̗̖͙̯͉̠̟͈͍͕̪͓̝̩̦̖̹̼̠̘̮͚̟͉̺̜͍͓̯̳̱̻͕̣̳͉̻̭̭̱͍̪̩̭̺͕̺̼̥̪͖̦̟͎̻̰_Ỏ͖͈̞̩͎̻̫̫̜͉̠̫͕̭̭̫̫̹̗̹͈̼̠̖͍͚̥͈̮̼͕̠̤̯̻̥̬̗̼̳̤̳̬̪̹͚̞̼̠͕̼̠̦͚̫͔̯̹͉͉̘͎͕̼̣̝͙̱̟̹̩̟̳̦̭͉̮̖̭̣̣̞̙̗̜̺̭̻̥͚͙̝̦̲̱͉͖͉̰̦͎̫̣̼͎͍̠̮͓̹̹͉̤̰̗̙͕͇͔̱͕̭͈̳̗̭͔̘̖̺̮̜̠͖̘͓̳͕̟̠̱̫̤͓͔̘̰̲͙͍͇̙͎̣̼̗̖͙̯͉̠̟͈͍͕̪͓̝̩̦̖̹̼̠̘̮͚̟͉̺̜͍͓̯̳̱̻͕̣̳͉̻̭̭̱͍̪̩̭̺͕̺̼̥̪͖̦̟͎̻̰ " )
 
 # $1  intensity
 # $2  population
@@ -28,10 +33,11 @@ function crashoverride () {
   local _height=$( tput lines )
 
   for (( z=1; z<=$_population; z++ )); do
-    local _xpos=$( _crashoverrideRandom 0 $_width )
-    local _ypos=$( _crashoverrideRandom 0 $_height )
+    local _xpos=$( _crashoverrideRandomInteger 0 $_width )
+    local _ypos=$( _crashoverrideRandomInteger 0 $_height )
+    local _message=$( _crashoverrideRandomArrayValue "_crashoverrideMessages[@]" )
 
-
+    echo $_message
 
     sleep 0.1
   done &
@@ -43,11 +49,13 @@ function crashoverride () {
 function _crashoverrideWindow () {
   local _xpos=$1
   local _ypos=$2
+
+  c
 }
 
 # $1  min
 # $2  max
-function _crashoverrideRandom () {
+function _crashoverrideRandomInteger () {
   local _min=$1
   local _max=$2
 
@@ -55,6 +63,20 @@ function _crashoverrideRandom () {
 
   #local _rand=$(printf "0.%03d%02d" $(( $RANDOM % 1000 )) $(( $RANDOM % 100)))
   #echo "$a * $_min " | bc -l
+}
+
+# $1  array
+# return
+function _crashoverrideRandomArrayValue () {
+  local _array=("${!1}");
+
+  # Seperate lines to fix code-highting error with double quotes
+  echo ${_array["$[RANDOM % \
+                ${#_array[@]}]"]}
+}
+
+function _crashoverrideRandomAnsiColor () {
+  echo $(( ( RANDOM % 7 )  + 1 ))
 }
 
 crashoverride 10 20 1
